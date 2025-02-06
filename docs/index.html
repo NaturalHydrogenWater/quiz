@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>クイズアプリ</title>
+    <style>
+        body { font-family: 'Arial', sans-serif; text-align: center; background-color: #f4f4f4; }
+        .container { max-width: 600px; margin: 50px auto; padding: 20px; background: white; border-radius: 10px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); }
+        h1 { color: #333; }
+        .question { font-size: 22px; font-weight: bold; margin-bottom: 20px; }
+        .options button { display: block; width: 100%; margin: 10px 0; padding: 12px; border: none; border-radius: 5px; background: #007BFF; color: white; font-size: 16px; cursor: pointer; transition: 0.3s; }
+        .options button:hover { background: #0056b3; }
+        #next-btn { margin-top: 20px; display: none; padding: 10px 20px; border: none; border-radius: 5px; background: #28a745; color: white; font-size: 16px; cursor: pointer; transition: 0.3s; }
+        #next-btn:hover { background: #218838; }
+        #score { font-size: 20px; font-weight: bold; color: #333; }
+        #question-image { max-width: 100%; height: auto; display: block; margin-bottom: 20px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>クイズチャレンジ！</h1>
+        <div id="quiz">
+            <img id="question-image" src="" alt="クイズ画像">
+            <p id="question" class="question"></p>
+            <div id="options" class="options"></div>
+            <button id="next-btn">次の問題へ</button>
+        </div>
+        <p id="score" style="display: none;"></p>
+    </div>
+    
+    <script>
+        const quizData = [
+            { question: "この人は誰？", image: "unnamed.jpg",options: ["小澤一輝", "小澤二輝", "小澤三輝", "小澤四輝"], answer: "小澤一輝" },
+            { question: "この男の現在の趣味は？", image: "スクリーンショット 2025-02-06 124201.png", options: ["パチンコ", "ゲーム", "料理", "プログラミング"], answer: "ゲーム" },
+            { question: "この男の出身は？", image: "unnamed (2).jpg", options: ["鳥取", "奈良", "兵庫", "福岡"], answer: "奈良" },
+            { question: "この男の個人制作作品は？", image: "unnamed (1).jpg",  options: ["オセロゲーム", "画像編集ソフト", "ラノベゲーム(原稿のみ）", "マッチングアプリ"], answer: "ラノベゲーム(原稿のみ）" },
+            { question: "この子は誰？", image: "unnamed (4).jpg", options: ["小澤一輝", "小澤二輝", "小澤三輝", "小澤四輝"], answer: "小澤一輝" },
+            { question: "この男が払う神戸電子の学費は？", image: "unnamed (5).jpg",  options: ["約350万", "約400万", "約450万", "約500万"], answer: "約500万" },
+            { question: "この男の出席率は？", image: "スクリーンショット 2025-02-06 124142.png", options: ["60％以下", "約70％", "約80％", "90％以上"], answer: "90％以上" },
+            { question: "この男に彼女は？", image: "unnamed (3).jpg", options: ["いる", "いない", "いる", "いない"], answer: "いない" },
+            { question: "この男の得意な言語は？", image: "unnamed (2).jpg",  options: ["C言語", "Java", "Python", "日本語"], answer: "日本語" },
+            { question: "そんなこの男の名前は？", image: "unnamed.jpg",  options: ["小澤一輝", "小澤二輝", "小澤三輝", "小澤四輝"], answer: "小澤一輝"}
+        ];
+
+        let currentQuestion = 0;
+        let score = 0;
+        const questionEl = document.getElementById("question");
+        const optionsEl = document.getElementById("options");
+        const nextBtn = document.getElementById("next-btn");
+        const scoreEl = document.getElementById("score");
+        const questionImage = document.getElementById("question-image");
+
+        function loadQuestion() {
+            const q = quizData[currentQuestion];
+            questionEl.textContent = q.question;
+            questionImage.src = q.image;
+            optionsEl.innerHTML = "";
+            
+            q.options.forEach(option => {
+                const button = document.createElement("button");
+                button.textContent = option;
+                button.onclick = () => checkAnswer(option);
+                optionsEl.appendChild(button);
+            });
+        }
+
+        function checkAnswer(answer) {
+            if (answer === quizData[currentQuestion].answer) {
+                score++;
+            }
+            currentQuestion++;
+            nextBtn.style.display = "block";
+        }
+
+        nextBtn.addEventListener("click", () => {
+            if (currentQuestion < quizData.length) {
+                loadQuestion();
+                nextBtn.style.display = "none";
+                window.scrollTo(0, 0); 
+            } else {
+                questionEl.style.display = "none";
+                optionsEl.style.display = "none";
+                questionImage.style.display = "none";
+                nextBtn.style.display = "none";
+                scoreEl.textContent = `あなたのスコア: ${score} / ${quizData.length}`;
+                scoreEl.style.display = "block";
+                window.scrollTo(0, 0); 
+            }
+        });
+
+        loadQuestion();
+    </script>
+</body>
+</html>
